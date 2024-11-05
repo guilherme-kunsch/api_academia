@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import { z, ZodError } from "zod";
+import { error } from "console";
 
 const prisma = new PrismaClient();
 
@@ -136,5 +137,35 @@ async function updateUserHandler(request: FastifyRequest, reply: FastifyReply) {
     }
     console.error(error);
     return reply.status(500).send({ error: "Erro ao editar usuário" });
+  }
+}
+
+async function deleteUserHandler(request: FastifyRequest, reply: FastifyReply) {
+  try {
+    const { id } = request.params as { id: string };
+    const parsedId = parseInt(id);
+
+    if (Number.isNaN(parsedId)) {
+      return reply
+        .status(400)
+        .send({ error: "ID inválido. O ID deve ser um número." });
+    }
+
+    const deleteUser = prisma.cadastroAluno.delete({
+        where: {
+            id: parsedId
+        }
+    });
+
+    return reply.status(201).send(deleteUser)
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return reply.status(400).send({
+        error: "Erro de validação",
+        issues: error.errors,
+      });
+    }
+    console.error(error);
+    return reply.status(500).send({ error: "Erro ao deletar usuário" });
   }
 }
