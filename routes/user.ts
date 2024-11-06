@@ -10,6 +10,7 @@ export async function getUserRoutes(app: FastifyInstance) {
   app.get("/:nome", getUserName);
   app.post("/", createUserHandler);
   app.put("/:id", updateUserHandler);
+  app.delete("/:id", deleteUserHandler);
 }
 
 async function getUsers(request: FastifyRequest, reply: FastifyReply) {
@@ -79,7 +80,7 @@ async function createUserHandler(request: FastifyRequest, reply: FastifyReply) {
       });
     }
     console.error(error);
-    return reply.status(500).send({ error: "Erro ao criar usuário" });
+    return reply.status(500).send({ error: error });
   }
 }
 
@@ -151,13 +152,14 @@ async function deleteUserHandler(request: FastifyRequest, reply: FastifyReply) {
         .send({ error: "ID inválido. O ID deve ser um número." });
     }
 
-    const deleteUser = prisma.cadastroAluno.delete({
+    await prisma.cadastroAluno.delete({
         where: {
             id: parsedId
         }
     });
 
-    return reply.status(201).send(deleteUser)
+    return reply.status(201).send({ message: "usuário deletado" })
+
   } catch (error) {
     if (error instanceof ZodError) {
       return reply.status(400).send({
