@@ -1,7 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import { z, ZodError } from "zod";
-import { error } from "console";
 
 const prisma = new PrismaClient();
 
