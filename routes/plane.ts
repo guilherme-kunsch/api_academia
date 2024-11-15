@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 export async function planes(app: FastifyInstance) {
   app.get("/", getPlaneAll);
   app.post("/", createPlane);
+  // app.get("/:nome", getPlaneName)
 }
 
 async function getPlaneAll(request: FastifyRequest, reply: FastifyReply) {
@@ -45,3 +46,27 @@ async function createPlane(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(500).send({ error: error });
   }
 }
+
+// async function getPlaneName(request: FastifyRequest, reply: FastifyReply) {
+//   try {
+//     const { nome } = request.params as { nome: string };
+//     const nameLowerCase = nome.toLowerCase().replace(/\s+/g, "");
+
+//     const plane = await prisma.plano.findFirst({
+//       where: {
+//         nome: {
+//           equals: nameLowerCase, // O nome normalizado, sem espaços
+//         },
+//       },
+//     });
+    
+
+//     if(!plane) {
+//       return reply.status(400).send("Erro ao buscar planos")
+//     }
+    
+//     return reply.status(200).send(plane)
+//   } catch(error) {
+
+//   }
+// }

@@ -1,13 +1,5 @@
-import fastify from "fastify";
-import { PrismaClient } from "@prisma/client";
-import { planes } from "../routes/plane";
-import { getUserRoutes } from "../routes/user";
-
-const prisma = new PrismaClient();
-const app = fastify();
-
-app.register(getUserRoutes, { prefix: "user" });
-app.register(planes, { prefix: "plane" });
+import { app } from './app'
+import { prisma } from './app';
 
 app
   .listen({ port: 3334 })

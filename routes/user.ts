@@ -25,10 +25,11 @@ async function getUsers(request: FastifyRequest, reply: FastifyReply) {
 async function getUserName(request: FastifyRequest, reply: FastifyReply) {
   try {
     const { nome } = request.params as { nome: string };
+    const nomeLowerCase = nome.toLocaleLowerCase()
 
     const user = await prisma.cadastroAluno.findFirst({
       where: {
-        nome: nome,
+        nome: nomeLowerCase,
       },
     });
 
